@@ -1,0 +1,38 @@
+version: '3.6'
+
+services:
+    ollama: 
+      image: ollama/ollama:latest
+      volumes:
+        - /ollama/models:/ollama/models
+      environment:
+        - OLLAMA_MODELS=/ollama/models
+    
+    chroma:
+      image: chromadb/chroma:latest
+      volumes:
+        - index_data:/chroma/.chroma/index
+      ports:
+        - 8000:8000
+      networks:
+        - net
+    
+    ui:
+      build: ./app
+      ports:
+        - 8080:8080
+      volumes:
+        - ./app:/app
+      depends_on:
+        - ollama
+        - chroma
+      environment:
+        - MODEL=phi3
+        - EMBEDDINGS_MODEL_NAME=all-MiniLM-L6-v2
+        - TARGET_SOURCE_CHUNKS=5
+
+volumes:
+  index_data:
+
+networks:
+  net:

@@ -1,0 +1,56 @@
+version: '3.6'
+
+services:
+    ollama: 
+      image: ollama/ollama:latest
+      volumes:
+        - /ollama/models:/ollama/models
+      environment:
+        - OLLAMA_MODELS=/ollama/models
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                capabilities: [gpu]
+    
+    chroma:
+      image: chromadb/chroma:latest
+      volumes:
+        - index_data:/chroma/.chroma/index
+      ports:
+        - 8000:8000
+      networks:
+        - net
+    
+    nvidia:
+      image: nvidia/cuda:12.3.1-base-ubuntu20.04
+      command: nvidia-smi
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 1
+                capabilities: [gpu]
+    
+    ui:
+      build: ./app
+      ports:
+        - 8080:8080
+      volumes:
+        - ./app:/app
+      depends_on:
+        - nvidia
+        - ollama
+        - chroma
+      environment:
+        - MODEL=llama3
+        - EMBEDDINGS_MODEL_NAME=all-MiniLM-L6-v2
+        - TARGET_SOURCE_CHUNKS=5
+
+volumes:
+  index_data:
+
+networks:
+  net:

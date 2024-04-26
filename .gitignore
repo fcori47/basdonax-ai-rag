@@ -1,0 +1,5 @@
+db
+__pycache__
+documents
+.venv
+tests.ipynb
