@@ -7,6 +7,8 @@ services:
         - /ollama/models:/ollama/models
       environment:
         - OLLAMA_MODELS=/ollama/models
+      networks:
+        - net
     
     chroma:
       image: chromadb/chroma:latest
@@ -30,6 +32,8 @@ services:
         - MODEL=phi3
         - EMBEDDINGS_MODEL_NAME=all-MiniLM-L6-v2
         - TARGET_SOURCE_CHUNKS=5
+      networks:
+        - net
 
 volumes:
   index_data:
