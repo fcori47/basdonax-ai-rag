@@ -4,9 +4,9 @@ services:
     ollama: 
       image: ollama/ollama:latest
       volumes:
-        - /ollama/models:/ollama/models
+        - /ollama/models:/home/models
       environment:
-        - OLLAMA_MODELS=/ollama/models
+        - OLLAMA_MODELS=/home/models
       deploy:
         resources:
           reservations:
