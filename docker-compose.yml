@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
     ollama: 
-      image: chromadb/chroma:0.5.1.dev111
+      image: ollama/ollama:latest
       volumes:
         - /ollama/models:/home/models
       environment:
@@ -15,7 +15,7 @@ services:
                 capabilities: [gpu]
     
     chroma:
-      image: chromadb/chroma:latest
+      image: chromadb/chroma:0.5.1.dev111
       volumes:
         - index_data:/chroma/.chroma/index
       ports:
