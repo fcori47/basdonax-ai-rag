@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
     ollama: 
-      image: ollama/ollama:latest
+      image: chromadb/chroma:0.5.1.dev111
       volumes:
         - /ollama/models:/home/models
       environment:
